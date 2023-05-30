@@ -1,0 +1,92 @@
+.media {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    /* height: 50vh; */
+    padding: 5px;
+    margin: 5px 0;
+    background-color: #282c34;
+    color: aliceblue;
+    border-radius: 10px;
+    position: relative;
+    font-family: "Montserrat", sans-serif;
+    transition: transform 1s !important;
+  }
+  .trending {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+ 
+  .media:hover {
+    background-color: white;
+    color: black;
+    transform: scale(1.05);
+    transition: transform 1s !important;
+   
+  }
+  .pageTitle {
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    font-family: "Montserrat",sans-serif;
+    font-size: 2vw;
+    padding: 4px;
+    border-radius: 50px;
+    color: #fff;
+}
+  @media (max-width: 550px) {
+    .media {
+      width: 46%;
+    }
+  }
+  
+  .poster {
+    border-radius: 10px;
+  }
+  
+  .title {
+    width: 100%;
+    height: 80%;
+    text-align: center;
+    font-size: 17px;
+    padding: 8px 0;
+  }
+  .subTitle {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 3px;
+    padding: 0 2px;
+    padding-bottom: 3px;
+  }
+  .App{
+    min-height: 100vh;
+    background-color: #39445a;
+    color: #fff;
+    padding-top: 100px;
+    padding-bottom: 70px;
+  }
+  @media (min-width: 1280px){
+.MuiContainer-maxWidthLg {
+    max-width: 1280px;
+}
+}
+@media (min-width: 600px)
+{
+.MuiContainer-root {
+    padding-left: 24px;
+    padding-right: 24px;
+}
+}
+.MuiContainer-root {
+    width: 100%;
+    
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+* {
+    scroll-behavior: smooth;
+}
