@@ -9,11 +9,11 @@ import { useNavigate } from "react-router-dom";
 
   export const  MainNav = ({filterItem}) =>  {
    const navigate=useNavigate()
-    const [value, setValue] = useState(0);
+    const [value, setValue] = useState("All");
     return (
       <BottomNavigation
       sx={{width:'100%',position:'fixed',bottom:'0', backgroundColor:'#2d313a',border: '1px solid black',zIndex:'100'}}
-       
+
       value={value}
         onChange={(event, newValue) => {
           // console.log("newValue",newValue)
