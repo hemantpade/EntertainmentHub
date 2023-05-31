@@ -5,7 +5,6 @@ import TvIcon from '@mui/icons-material/Tv';
 import MovieCreationIcon from '@mui/icons-material/MovieCreation';
 import SearchIcon from '@mui/icons-material/Search';
 import WhatshotIcon from '@mui/icons-material/Whatshot';
-import Menu from '../menuApi'
 import { useNavigate } from "react-router-dom";
 
   export const  MainNav = ({filterItem}) =>  {

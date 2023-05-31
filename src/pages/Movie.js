@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Menu } from "../components/menuApi";
-import "../components/SingleContent/SingleContent.css";
-import BadgeInside from "../components/BadgeInside";
+import React, { useEffect, useState } from "react";import "../components/SingleContent/SingleContent.css";
+
 import axios from "axios";
 // import MainNav from "./MainNav";
-import SingleContent from "../components/SingleContent/SingleContent";
-import PaginationSize from "../components/Pagination/SingleTemplate";
+import PaginationSize from "../components/PageTemplate/PageTemplate";
 import Gener from "../components/Gener/Gener";
 import useGenre from "../hooks/useGenre.js";
+import { getDataMovieApi } from "../services/ApiRequest";
 import { options } from "../components/Servies/Auth";
 const Movie = () => {
   const [menuData, setMenuData] = useState([]);
@@ -24,13 +22,7 @@ const Movie = () => {
   const[type,setType]=useState("movie")
 
   const getDataMovie = async () => {
-    fetch(
-      `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=${page}&with_genres=${genreforURL}&sort_by=popularity.desc`,
-      options
-    )
-      .then(async (response) => {
-        let JsonRes = await response.json();
-        console.log("response.json()", JsonRes);
+    getDataMovieApi(`/discover/movie?include_adult=false&include_video=false&language=en-US&page=${page}&with_genres=${genreforURL}&sort_by=popularity.desc`).then((JsonRes) => {
         // setMenuData(JsonRes.results)
         if(page===1){
           setMenuData(JsonRes.results)
@@ -38,7 +30,6 @@ const Movie = () => {
         {setMenuData((prev) => [...prev,...JsonRes.results]);}
         setTotalPages(JsonRes.total_pages);
       })
-      .then((response) => console.log(response))
       .catch((err) => console.error(err));
 
     // setContent(response.data)
@@ -69,22 +60,22 @@ const Movie = () => {
           setPage={setPage}
           setMenuData={setMenuData}
         />
-        <SingleContent
+        <PaginationSize
           menuData={menuData}
-          // filterItem={filterItem}   getDataMovie={getDataMovie()}
-          value={"Movie"}
-          type={type}
-          stateId={stateId}
+          value={"All"}
+          totalPages={totalPages}
           page={page}
           setPage={setPage}
-          media_type={media_type}
-          totalPages={totalPages}
           setMenuData={setMenuData}
+          content={content}
+          media_type={media_type}
+          stateId={stateId}
           gener={gener}
           setGener={setGener}
+          type={type}
         />
       </div>
-      <BadgeInside gener={gener} setGener={setGener}/>
+     
     </>
   );
 };

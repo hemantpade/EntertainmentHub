@@ -1,0 +1,8 @@
+.gener{
+    background: #e0e0e0;
+    color: #000000;
+    font-weight: Bold;
+}
+.gener:hover{
+        background: #fff; 
+}

@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
 import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
-import SingleTemplate from "../Pagination/SingleTemplate";
-import OnClickView from "../OnClickView/OnClickView";
-import BadgeInside from "../BadgeInside";
+import SingleTemplate from "../PageTemplate/PageTemplate";
+import viewModal from "../ViewModal/ViewModal";
+
 import {options} from "../Servies/Auth";
+import "./Gener.css"
+import { getDataGenerAPI } from "../../services/ApiRequest";
+
 const Gener = ({
   gener,
   setGener,
@@ -34,15 +37,12 @@ const Gener = ({
 
   const getDataGener = () => {
 
-    fetch(
-      `https://api.themoviedb.org/3/genre/${type}/list?language=en`,
-      options
+    getDataGenerAPI(
+      `genre/${type}/list?language=en`
     )
-      .then(async (response) => {
-        let JsonRes4 = await response.json();
+      .then( (JsonRes4) => {
         setGener(JsonRes4.genres);
       })
-      .then((response) => console.log(response))
       .catch((err) => console.error(err));
   };
   useEffect(() => {
@@ -69,6 +69,7 @@ const Gener = ({
         {gener.map((g) => {
           return (
             <Chip
+              className="gener"
               style={{ margin: 2 }}
               spacing={1}
               label={g.name}
@@ -87,7 +88,7 @@ const Gener = ({
           );
         })}
       </div>
-      <BadgeInside gener={gener} setGener={setGener} />
+   
     </>
   );
 };

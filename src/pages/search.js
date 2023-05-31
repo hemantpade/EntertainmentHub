@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Menu } from "../components/menuApi";
 import { createTheme } from "@mui/material/styles";
 import { Button, Tab, Tabs, TextField, ThemeProvider } from "@mui/material";
 import "./Search.css";
 import SearchIcon from "@mui/icons-material/Search";
 import "../components/SingleContent/SingleContent.css";
-import SingleContent from "../components/SingleContent/SingleContent";
 import { withTheme } from "@emotion/react";
+import PaginationSize from "../components/PageTemplate/PageTemplate";
 import { options } from "../components/Servies/Auth";
+import { getDataSearchApi } from "../services/ApiRequest";
 const darkTheme = createTheme({
   palette: {
     mode: "dark",
@@ -23,38 +23,31 @@ const Search = () => {
   const [searchText, setSearchText] = useState("");
   const [search, setSearch] = useState("");
   const [searchItem, setSearchItem] = useState([]);
-  const[menuData ,setMenuData]=useState([]);
-  const[totalPages,setTotalPages]=useState(null);
-  
-  
-  
+  const [menuData, setMenuData] = useState([]);
+  const [totalPages, setTotalPages] = useState(null);
+
   const getDataSearch = () => {
-   
-    fetch(
-      `https://api.themoviedb.org/3/search/${type}?query=${search}&include_adult=false&language=en-US&page=${page}`,
-      options
+    getDataSearchApi(
+      `search/${type}?query=${search}&include_adult=false&language=en-US&page=${page}`
     )
-    .then( async(response) => {
-      let JsonRes3= await response.json()
-      console.log('response.json()1', JsonRes3.results)
-      if(search=="" || page==1){
-        setMenuData(JsonRes3.results)
-      }else
-    {setMenuData((prev) => [...JsonRes3.results,...prev]);}
-      setTotalPages(JsonRes3.total_pages)
-    })
-      .then((response) => console.log(response))
+      .then((JsonRes3) => {
+        if (search == "" || page == 1) {
+          setMenuData(JsonRes3.results);
+        } else {
+          setMenuData((prev) => [...JsonRes3.results, ...prev]);
+        }
+        setTotalPages(JsonRes3.total_pages);
+      })
       .catch((err) => console.error(err));
   };
- 
+
   useEffect(() => {
     // fetchSearch();
     getDataSearch();
     // pageNumber(page);
     window.scroll(0, 0);
-  }, [type,page,search]);
+  }, [type, page, search]);
 
-  
   return (
     <>
       <div className="">
@@ -69,7 +62,7 @@ const Search = () => {
               onChange={(e) => setSearch(e.target.value)}
             />
             <Button
-              onClick={() =>getDataSearch()}
+              onClick={() => getDataSearch()}
               variant="contained"
               style={{ marginLeft: 10 }}
             >
@@ -89,20 +82,27 @@ const Search = () => {
             aria-label="disabled tabs example"
           >
             <Tab
-             type="movie"
+              type="movie"
               style={{ width: "50%" }}
               label="Search Movies"
               value={"movie"}
             />
             <Tab
-            type="tv"
+              type="tv"
               style={{ width: "50%" }}
               label="Search TV Series"
               value={"tv"}
             />
           </Tabs>
           <div>
-            <SingleContent menuData={menuData} totalPages={totalPages} page={page} setPage={setPage}/>
+            <PaginationSize
+              menuData={menuData}
+              totalPages={totalPages}
+              page={page}
+              setPage={setPage}
+              setMenuData={setMenuData}
+              type={type}
+            />
           </div>
         </ThemeProvider>
       </div>

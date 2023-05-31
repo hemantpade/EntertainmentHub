@@ -5,33 +5,11 @@ import "react-alice-carousel/lib/alice-carousel.css";
 import Movie from "../../pages/Movie";
 import { img_300, unavailable } from "../../configuration/Configuration";
 import {options} from "../Servies/Auth";
-const handleDragStart = (e) => e.preventDefault();
-const Carousel = ({ iD, media_type }) => {
-  const [type, setType] = useState("movie");
-  const [actor, setActor] = useState([]);
-  const[data ,setData]=useState([])
 
-  
-  const getDataOnClick = () => {
-    fetch(
-      `https://api.themoviedb.org/3/${type}/${iD}/credits?api_key=26ba5e77849587dbd7df199727859189&language=en-US`,
-      options
-    )
-      .then( async(response) => {
-        let JsonRes5 = await response.json();
-        console.log("response.json()", JsonRes5);
-        if (JsonRes5.cast) {
-          setActor(JsonRes5.cast);
-        }
-      })
-      .then((response) => console.log(response))
-      .catch((err) => console.error(err));
-  };
-  
-  useEffect(() => {
-    getDataOnClick();
-  }, [type, iD]);
-  
+
+const handleDragStart = (e) => e.preventDefault();
+const Carousel = ({actor}) => {
+
   const items = actor.map((c) => (
     <div className="carouselItem">
       <img

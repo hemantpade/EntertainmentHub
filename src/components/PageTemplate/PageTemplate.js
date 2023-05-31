@@ -2,15 +2,16 @@ import React, { useState, useEffect } from "react";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import "./Pagination.css";
-import { Menu } from "../menuApi";
-import "../Pagination/Pagination.css";
+import "./Pagination.css";
 import Chip from "@mui/material/Chip";
 import Badge from "@mui/material/Badge";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
-import OnClickView from "../OnClickView/OnClickView";
+import ViewModal from "../ViewModal/ViewModal";
 import { img_300, unavailable } from "../../configuration/Configuration";
 import {options} from "../Servies/Auth"
+import { getDataTimeAPI } from "../../services/ApiRequest";
+
 const darkTheme = createTheme({
   palette: {
     mode: "dark",
@@ -29,6 +30,7 @@ export default function PaginationSize({
   gener,
   type,
 }) {
+ 
   const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [itemsToDisplay, setitemsToDisplay] = useState([]);
@@ -36,26 +38,9 @@ export default function PaginationSize({
   const [modalData, setModalData] = useState("");
   const [iD, setID] = useState();
   const [offset, setOffset] = useState();
-  const [data, setData] = useState([]);
   const itemsPerPage = 10;
   const updatedList = [];
   
-  
-  const getDataTime = () => {
-
-    fetch(`https://api.themoviedb.org/3/${type}/${iD}?language=en-US`, options)
-      .then(async (response) => {
-        let JsonRes6 = await response.json();
-        setData(JsonRes6);
-      })
-      .then((response) => console.log(response))
-      .catch((err) => console.error(err));
-  };
-
-  useEffect(() => {
-    getDataTime();
-  }, [type, iD]);
-
   useEffect(() => {
     paginate(page);
     const handleScroll = (e) => {
@@ -113,14 +98,13 @@ export default function PaginationSize({
   return (
     <>
       <section className="trending">
-        <OnClickView
+        <ViewModal
           openparams={open}
           iD={iD}
           type={type}
           menuData={menuData}
           handleClose={handleClose}
           gener={gener}
-          data={data}
           modalData={modalData}
         />
         {totalPages &&

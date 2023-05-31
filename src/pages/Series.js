@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Menu } from "../components/menuApi";
 import "../components/SingleContent/SingleContent.css";
-import SingleContent from "../components/SingleContent/SingleContent";
 import useGenre from "../hooks/useGenre";
 import Gener from "../components/Gener/Gener"
-import BadgeInside from "../components/BadgeInside";
 import { options } from "../components/Servies/Auth";
-
+import {getDataSeriesApi} from "../services/ApiRequest"
+import PaginationSize from "../components/PageTemplate/PageTemplate";
 const Series = () => {
   const [menuData, setMenuData] = useState([]);
   const [search, setSearch] = useState("");
@@ -24,12 +22,10 @@ const Series = () => {
   }, [page, genreforURL]);
 
   const getDataSeries = async () => {
-    fetch(
-      `https://api.themoviedb.org/3/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=${page}&with_genres=${genreforURL}&sort_by=popularity.desc`,
-      options
+    getDataSeriesApi(
+      `discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=${page}&with_genres=${genreforURL}&sort_by=popularity.desc`
     )
-      .then(async (response) => {
-        let JsonRes1 = await response.json()
+      .then(async (JsonRes1) => {
         if (page === 1) {
           setMenuData(JsonRes1.results)
         } else {
@@ -54,7 +50,7 @@ const Series = () => {
           selectedGenres={selectedGenres}
           setSelectedGenres={setSelectedGenres}
         />
-        <SingleContent
+        <PaginationSize
           menuData={menuData}
           type={type}
           value={"tv"}
@@ -62,12 +58,11 @@ const Series = () => {
           setPage={setPage}
           gener={gener}
           setGener={setGener}
-          // pageNumber={pageNumber}
           media_type={media_type}
           totalPages={totalPages}
         />
       </div>
-      <BadgeInside gener={gener} setGener={setGener}/>
+      {/* <BadgeInside gener={gener} setGener={setGener}/> */}
     </>
   );
 };

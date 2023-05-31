@@ -2,38 +2,68 @@ import React, { useEffect, useState } from "react";
 import Fade from "@mui/material/Fade";
 import Modal from "@mui/material/Modal";
 import Stack from "@mui/material/Stack";
-import "./onClickView.css";
-import Menu from "../menuApi";
+import "./ViewModal.css";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import EmojiObjectsOutlinedIcon from '@mui/icons-material/EmojiObjectsOutlined';
 import Button from "@mui/material/Button";
 import Carousel from "../Carousel/Corousel";
 import Chip from "@mui/material/Chip";
-import Runtime from "../Runtime";
+
 import {
   img_500,
   unavailable,
   unavailableLandscape,
 } from "../../configuration/Configuration.js";
+import { getDataCarouselAPI, getDataTimeAPI } from "../../services/ApiRequest";
 const style = {
   pt: 8,
   px: 10,
   pb: 5,
 };
 
-export default function OnClickView(props) {
-  
+export default function ViewModal(props) {
 
+ const[type,setType]=useState("");
+ const [actor, setActor] = useState([]);
+ const [data, setData] = useState([]);
+
+//time
+ const getDataTime = () => {
+  getDataTimeAPI(`${props.type}/${props.iD}?language=en-US`)
+    .then( (JsonRes6) => {
+      setData(JsonRes6);
+    })
+    .catch((err) => console.error(err));
+};
+ 
+  const getDataOnClick = () => {
+    getDataCarouselAPI(
+      `${props.type}/${props.iD}/credits?api_key=26ba5e77849587dbd7df199727859189&language=en-US`
+    )
+      .then( (JsonRes5) => {
+        if (JsonRes5.cast) {
+          setActor(JsonRes5.cast);
+        }
+      })
+      .catch((err) => console.error(err));
+  };
+  
+  useEffect(() => {
+    getDataOnClick();
+    getDataTime()
+  }, [props.type, props.iD]);
   const convertMinutesToTime = (minutes) => {
     const totalSeconds = minutes * 60;
     const hours = Math.floor(totalSeconds / 3600);
     const minutesRemaining = Math.floor((totalSeconds % 3600) / 60);
     const remainingSeconds = totalSeconds % 60;
 
-    return { hours, minutes: minutesRemaining, remainingSeconds };
+  
+    return { hours, minutesRemaining, remainingSeconds };
+    
   };
-  const { hours, minutes, remainingSeconds } = convertMinutesToTime(
-    props.data.runtime || props.data.episode_run_time
+  let { hours, minutes, remainingSeconds } = convertMinutesToTime(
+    data.runtime || data.episode_run_time
   );
   
   return (
@@ -102,7 +132,7 @@ export default function OnClickView(props) {
                       {curElem.overview}
                     </span>
                     <div>
-                      <Carousel iD={props.iD} media_type={props.media_type} />
+                      <Carousel actor={actor}/>
                     </div>
                     <Button
                       variant="contained"
